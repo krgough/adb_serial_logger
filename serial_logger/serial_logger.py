@@ -1,29 +1,8 @@
 #!/usr/bin/env python3
 '''
-Created on 14 May 2017
-
 @author: Keith Gough
 
 Serial Port Logger - for logging serial port activity on a device
-
-Operating Instructions:
------------------------
-Debug data being sent to the serial port is captured and logged in rotating
-log files. Connect the serial port on the DUT to the logging device serial
-port and edit the setup below to setup baudrates and logging policy.
-
-Edit the crontab file to start this logging script if process stops or logging
-device is reset for some reason.
-
-Dependencies:
--------------
-pyserial - install with 'pip3 install pyserial'
-
-CRONTAB EDITS
--------------
-Add these lines to crontab using 'crontab -e'
-# Runs the bash script every 5mins that checks if logger is running
-*/5 * * * * /home/pi/repositories/serialLogger/startLogging.sh > /dev/null 2>&1
 
 '''
 
@@ -39,6 +18,8 @@ from logging import handlers
 
 import serial
 
+import config as cfg
+
 STOP_THREAD = threading.Event()
 THREAD_POOL = []
 
@@ -47,13 +28,6 @@ TX_QUEUE = queue.Queue(maxsize=1000)
 
 DEBUG = True
 DATE_FORMAT = "%d/%m/%y %H:%M:%S.%f"
-
-PORT = "//dev/cu.usbmodem411"
-BAUD = 115200
-LOG_COUNT = 5
-LOG_MAX_BYTES = 10000000
-LOG_FILENAME = 'log.txt'
-RUN_FLAG = 'delete-me-to-stop-logger'  # If this file exists then we run
 
 # Create a logger for general use
 LOGGER = logging.getLogger(__name__)
@@ -72,8 +46,11 @@ LOGGER_FILE.setLevel(logging.INFO)
 
 # Create and add a handler to the logger
 HANDLER = handlers.RotatingFileHandler(
-    LOG_FILENAME, maxBytes=1000000, mode='a', backupCount=LOG_COUNT)
-FILE_FMT = logging.Formatter('%(asctime)s:%(message)s', "%Y-%m-%d %H:%M:%S")
+    cfg.LOG_FILENAME,
+    maxBytes=cfg.LOG_MAX_BYTES,
+    mode='a',
+    backupCount=cfg.LOG_COUNT)
+FILE_FMT = logging.Formatter('%(asctime)s,%(message)s', "%Y-%m-%d %H:%M:%S")
 HANDLER.setFormatter(FILE_FMT)
 LOGGER_FILE.addHandler(HANDLER)
 
@@ -152,12 +129,12 @@ def start_serial_logger():
     """  Start the logger
     """
     # Open the serial port
-    ser = open_serial_port(PORT, BAUD)
+    ser = open_serial_port(cfg.PORT, cfg.BAUD)
     if not ser:
         sys.exit(1)
     start_serial_threads(ser)
 
-    while os.path.exists(RUN_FLAG):
+    while os.path.exists(cfg.RUN_FLAG):
         while not RX_QUEUE.empty():
             # Process the rxQueue
             data = RX_QUEUE.get()

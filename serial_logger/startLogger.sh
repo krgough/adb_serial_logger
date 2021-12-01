@@ -12,6 +12,6 @@ if [ $? == 0 ]; then
   echo "serial_logger.py is already running"
 else
   echo "Starting serial_logger.py"
-  /usr/bin/python3 /home/keith/repositories/serial-logger/serial-logger/serial_logger.py  # > /dev/null 2>&1 &
+  /usr/bin/python3 /home/keith/repositories/serial_logger/serial_logger/serial_logger.py &
   eval "$cmd"
 fi

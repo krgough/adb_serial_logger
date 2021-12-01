@@ -11,9 +11,10 @@ device is reset for some reason.
 
 Dependencies:
 -------------
-pyserial - install with 'pip3 install pyserial'
-or with
+Install with...
+```
 pip3 install -r requirements.txt
+```
 
 CRONTAB EDITS
 -------------

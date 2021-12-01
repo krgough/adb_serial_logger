@@ -1,4 +1,4 @@
-# Serial Port Logger - for logging serial port activity on a device
+# Serial Port Logger - Logging serial port activity from a device
 
 Operating Instructions:
 -----------------------
@@ -12,10 +12,12 @@ device is reset for some reason.
 Dependencies:
 -------------
 pyserial - install with 'pip3 install pyserial'
-Add these lines to crontab using 'crontab -e'
+or with
+pip3 install -r requirements.txt
 
 CRONTAB EDITS
 -------------
+Add these lines to crontab using 'crontab -e'
 ```
 # Runs the bash script every 5mins that checks if logger is running
 */5 * * * * /home/<Path-to-repo>/serial_logger/serial_logger/startLogger.sh > /dev/null 2>&1 & 

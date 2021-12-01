@@ -1,17 +1,17 @@
 #!/bin/bash
 
 # Check if a python app is runnning
-# serialLogger.py
+# serial_logger.py
 
 # We define this as a command as we will use it more than once
 # Could make this a function?
-cmd="/bin/ps -ax | /bin/grep \"[s]erialLogger.py\""
+cmd="/bin/ps -ax | /bin/grep \"[s]erial_logger.py\""
 eval "$cmd"
 
 if [ $? == 0 ]; then
-  echo "serialLogger.py is already running"
+  echo "serial_logger.py is already running"
 else
-  echo "Starting serialLogger.py"
-  /usr/bin/python3 /home/pi/repositories/logger/serialLogger.py  > /dev/null 2>&1 &
+  echo "Starting serial_logger.py"
+  /usr/bin/python3 /home/keith/repositories/serial-logger/serial-logger/serial_logger.py  # > /dev/null 2>&1 &
   eval "$cmd"
 fi

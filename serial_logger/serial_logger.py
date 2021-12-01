@@ -31,7 +31,7 @@ DATE_FORMAT = "%d/%m/%y %H:%M:%S.%f"
 
 # Create a logger for general use
 LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.DEBUG)
+LOGGER.setLevel(logging.INFO)
 LOGGER_HANDLER = logging.StreamHandler()  # This logs to stderr
 LOGGER_FMT = logging.Formatter(
     '%(asctime)s - %(name)s - %(levelname)s - %(message)s',

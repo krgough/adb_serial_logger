@@ -18,5 +18,5 @@ CRONTAB EDITS
 -------------
 ```
 # Runs the bash script every 5mins that checks if logger is running
-*/5 * * * * /home/<Path-to-repo>/serial_logger/serial_logger/startLogger.sh > /tmp/logger
+*/5 * * * * /home/<Path-to-repo>/serial_logger/serial_logger/startLogger.sh > /dev/null 2>&1 & 
 ```

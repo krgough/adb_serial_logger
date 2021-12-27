@@ -4,6 +4,12 @@
 
 Serial Port Logger - for logging serial port activity on a device
 
+Implemented with threads and Queues - This was originally to support
+sending commands on the serial port after some certain messages have
+been received on the same serial port e.g. device sends a particular
+debug message and then we send a command to the device to trigger
+some wanted behaviour. 
+
 '''
 
 

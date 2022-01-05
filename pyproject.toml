@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "serial_logger"
+version = "0.1.0"
+description = "Log serial port activity or responses to cli commands"
+authors = ["krgough <krgough@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyserial = "^3.5"
+
+[tool.poetry.dev-dependencies]
+flake8 = "^4.0.1"
+pylint = "^2.12.2"
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+max-line-length = "88"

@@ -8,7 +8,7 @@ Implemented with threads and Queues - This was originally to support
 sending commands on the serial port after some certain messages have
 been received on the same serial port e.g. device sends a particular
 debug message and then we send a command to the device to trigger
-some wanted behaviour. 
+some wanted behaviour.
 
 '''
 
@@ -24,7 +24,7 @@ from logging import handlers
 
 import serial
 
-import config as cfg
+import serial_logger.config as cfg
 
 STOP_THREAD = threading.Event()
 THREAD_POOL = []

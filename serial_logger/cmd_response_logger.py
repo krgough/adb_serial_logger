@@ -10,9 +10,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 def configure_logger(name, log_path=None, console=True):
-    """ Logger configuration function
-        If logPath given then log to console and to the file
-        else to console only.
+    """Logger configuration function
+    If log_path given then log to console and to the file
+    else to console only.
     """
     version = 1
     disable_existing_loggers = False
@@ -50,13 +50,15 @@ def configure_logger(name, log_path=None, console=True):
         active_handlers.append("console")
         handlers["console"] = console_handler
 
-    logging.config.dictConfig({
-        'version': version,
-        'disable_existing_loggers': disable_existing_loggers,
-        'formatters': formatters,
-        'handlers': handlers,
-        'loggers': {'': {'level': 'DEBUG', 'handlers': active_handlers}},
-    })
+    logging.config.dictConfig(
+        {
+            "version": version,
+            "disable_existing_loggers": disable_existing_loggers,
+            "formatters": formatters,
+            "handlers": handlers,
+            "loggers": {"": {"level": "DEBUG", "handlers": active_handlers}},
+        }
+    )
 
     return logging.getLogger(name)
 
@@ -83,7 +85,7 @@ def parse_adb_battery(data):
     """
     new_data = []
     for row in data.splitlines()[1:]:
-        row = row.split(':')
+        row = row.split(":")
         new_data.append(f"{row[0].strip()}:{row[1].strip()}")
 
     return ",".join(new_data)
@@ -93,7 +95,7 @@ def execute_command(cmd):
     """Execute a command and return the response"""
     try:
         resp = subprocess.run(cmd, check=True, stdout=subprocess.PIPE)
-        resp = parse_adb_battery(resp.stdout.decode('utf-8'))
+        resp = parse_adb_battery(resp.stdout.decode("utf-8"))
         LOGGER.info(resp)
     except subprocess.CalledProcessError as err:
         resp = f"adb command failed. {err}"
@@ -105,7 +107,7 @@ def main(cmd):
     """Send a command and log the response"""
     try:
         resp = subprocess.run(cmd, check=True, stdout=subprocess.PIPE)
-        resp = parse_adb_battery(resp.stdout.decode('utf-8'))
+        resp = parse_adb_battery(resp.stdout.decode("utf-8"))
         LOGGER.info(resp)
     except subprocess.CalledProcessError as err:
         resp = f"adb command failed. {err}"

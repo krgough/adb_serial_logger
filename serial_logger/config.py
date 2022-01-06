@@ -13,4 +13,5 @@ LOG_DURATION = 60 * 24  # used by event logger only
 RUN_FLAG = 'delete-me-to-stop-logger'
 
 # Command response logger config
-MSG = ["adb", "shell", "dumpsys", "battery"]
+MSG_BATTERY = ["adb", "shell", "dumpsys", "battery"]
+MSG_TELEPHONY = ["adb", "shell", "dumpsys", "telephony.registry"]

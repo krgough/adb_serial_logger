@@ -4,6 +4,7 @@
 """
 import subprocess
 import logging.config
+import re
 import serial_logger.config as cfg
 
 LOGGER = logging.getLogger(__name__)
@@ -91,30 +92,42 @@ def parse_adb_battery(data):
     return ",".join(new_data)
 
 
+def parse_adb_telephony(data):
+    """Parse the telephony.registry response for mRilDataRadioTechnology
+    We assume the value of that parameter is the network type e.g. LTE or GSM
+    """
+    # data = [d.strip().split(", ") for d in data.splitlines()]
+    search_string = "mRilDataRadioTechnology=(.*?),"
+    match = re.search(search_string, data)
+    data_radio = match.group(1) if match else "Not found in telephony response"
+    return f"Data_Radio={data_radio}"
+
+
 def execute_command(cmd):
     """Execute a command and return the response"""
     try:
         resp = subprocess.run(cmd, check=True, stdout=subprocess.PIPE)
-        resp = parse_adb_battery(resp.stdout.decode("utf-8"))
-        LOGGER.info(resp)
     except subprocess.CalledProcessError as err:
-        resp = f"adb command failed. {err}"
-        LOGGER.error(resp)
+        LOGGER.error("adb command failed. cmd=%s, err=%s", cmd, err)
+        resp = None
     return resp
 
 
 def main(cmd):
     """Send a command and log the response"""
-    try:
-        resp = subprocess.run(cmd, check=True, stdout=subprocess.PIPE)
+
+    resp = execute_command(cmd)
+    if resp and cmd == cfg.MSG_BATTERY:
         resp = parse_adb_battery(resp.stdout.decode("utf-8"))
-        LOGGER.info(resp)
-    except subprocess.CalledProcessError as err:
-        resp = f"adb command failed. {err}"
-        LOGGER.error(resp)
+
+    if resp and cmd == cfg.MSG_TELEPHONY:
+        resp = parse_adb_telephony(resp.stdout.decode('utf-8'))
+
+    LOGGER.info(resp)
 
 
 if __name__ == "__main__":
-    LOGGER = configure_logger(name=__name__, log_path="/tmp/junk.log")
-    CMD = cfg.MSG
-    execute_command(CMD)
+    # LOGGER = configure_logger(name=__name__, log_path="/tmp/junk.log")
+    LOGGER = configure_logger(name=__name__)
+    CMD = cfg.MSG_TELEPHONY
+    main(CMD)

@@ -113,21 +113,21 @@ def execute_command(cmd):
     return resp
 
 
-def main(cmd):
+def main(commands):
     """Send a command and log the response"""
 
-    resp = execute_command(cmd)
-    if resp and cmd == cfg.MSG_BATTERY:
-        resp = parse_adb_battery(resp.stdout.decode("utf-8"))
+    for cmd in commands:
+        resp = execute_command(cmd)
+        if resp and cmd == cfg.MSG_BATTERY:
+            resp = parse_adb_battery(resp.stdout.decode("utf-8"))
 
-    if resp and cmd == cfg.MSG_TELEPHONY:
-        resp = parse_adb_telephony(resp.stdout.decode('utf-8'))
+        if resp and cmd == cfg.MSG_TELEPHONY:
+            resp = parse_adb_telephony(resp.stdout.decode('utf-8'))
 
-    LOGGER.info(resp)
+        LOGGER.info(resp)
 
 
 if __name__ == "__main__":
     # LOGGER = configure_logger(name=__name__, log_path="/tmp/junk.log")
-    LOGGER = configure_logger(name=__name__)
-    CMD = cfg.MSG_TELEPHONY
-    main(CMD)
+    LOGGER = configure_logger(name=__name__, log_path=cfg.LOG_PATH)
+    main([cfg.MSG_TELEPHONY, cfg.MSG_BATTERY])
